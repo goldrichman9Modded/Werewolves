@@ -1,0 +1,25 @@
+public WerewolfCompat() {
+    // Register event listener only on the client side
+    MinecraftForge.EVENT_BUS.register(this);
+}
+
+@SubscribeEvent
+public void onRenderPlayer(RenderPlayerEvent.Pre event) {
+    if (isLocalPlayer(event.getEntity()) && isPlayerAnimatorInstalled()) {
+        event.setCanceled(true); // Prevent rendering werewolf model
+    }
+}
+
+private boolean isLocalPlayer(LocalPlayer player) {
+    return player == Minecraft.getInstance().player;
+}
+
+private boolean isPlayerAnimatorInstalled() {
+    try {
+        // Check if PlayerAnimator mod is loaded
+        Class.forName("com.playeranimator.Main"); 
+        return true;
+    } catch (ClassNotFoundException e) {
+        return false;
+    }
+}
